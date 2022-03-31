@@ -31,10 +31,13 @@ public class BookRepository {
     public Future<List<Book>> selectAll(SqlConnection connection,
                                         int limit,
                                         int offset) {
+       Map<String,Object> params = new HashMap<>();
+       params.put("limit",limit);
+       params.put("offset",offset);
         return SqlTemplate
                 .forQuery(connection, SQL_SELECT_ALL)
                 .mapTo(Book.class)
-                .execute(Map.of("limit", limit, "offset", offset))
+                .execute(params)
                 .map(rowSet -> {
                     final List<Book> books = new ArrayList<>();
                     rowSet.forEach(books::add);
